@@ -1,10 +1,20 @@
 # JavaScript Standard Style
 
-Translations: [English](../RULES.md), [Português](RULES-ptbr.md), [繁體中文](RULES-zhtw.md)
+<p align="center">
+  <a href="/docs/RULES-en.md">English</a> •
+  <a href="/docs/RULES-esla.md">Español (Latinoamérica)</a> •
+  <a href="/docs/RULES-fr.md">Français</a> •
+  <a href="/docs/RULES-iteu.md">Italiano (Italian)</a> •
+  <a href="/docs/RULES-ja.md">日本語 (Japanese)</a> •
+  <a href="/docs/RULES-kokr.md">한국어 (Korean)</a> •
+  <a href="/docs/RULES-ptbr.md">Português (Brasil)</a> •
+  <a href="/docs/RULES-zhcn.md">简体中文 (Simplified Chinese)</a> •
+  <a href="/docs/RULES-zhtw.md">繁體中文 (Taiwanese Mandarin)</a>
+</p>
 
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+[![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-Esto es un TL;DR (muy largo, no lo leí) de reglas JavaScript [standard](https://github.com/feross/standard).
+Esto es un TL;DR (muy largo, no lo leí) de reglas JavaScript [standard](https://github.com/standard/standard).
 
 La mejor manera de aprender acerca de `standard` es instalarlo darle una prueba en tu código.
 
@@ -361,16 +371,16 @@ La mejor manera de aprender acerca de `standard` es instalarlo darle una prueba 
   ```js
   var person = {
     set name (value) {    // ✗ avoid
-      this.name = value
+      this._name = value
     }
   }
 
   var person = {
     set name (value) {
-      this.name = value
+      this._name = value
     },
     get name () {         // ✓ ok
-      return this.name
+      return this._name
     }
   }
   ```
@@ -741,7 +751,11 @@ La mejor manera de aprender acerca de `standard` es instalarlo darle una prueba 
   ```js
   var score = 100
   function game () {
-    score: 50         // ✗ avoid
+    score: while (true) {      // ✗ avoid
+      score -= 10
+      if (score > 0) continue score
+      break
+    }
   }
   ```
 
@@ -856,8 +870,9 @@ La mejor manera de aprender acerca de `standard` es instalarlo darle una prueba 
   eslint: [`no-octal`](http://eslint.org/docs/rules/no-octal)
 
   ```js
-  const num = 042     // ✗ avoid
-  const num = '042'   // ✓ ok
+  const octal = 042         // ✗ avoid
+  const decimal = 34        // ✓ ok
+  const octalString = '042' // ✓ ok
   ```
 
 * **Evitar escapado de secuencia octal en cadena de texto literal.**

@@ -1,10 +1,20 @@
 # JavaScript Standard Style
 
-Translations: [Português](docs/RULES-ptbr.md), [Spanish](docs/RULES-esla.md), [繁體中文](docs/RULES-zhtw.md)
+<p align="center">
+  <a href="/docs/RULES-en.md">English</a> •
+  <a href="/docs/RULES-esla.md">Español (Latinoamérica)</a> •
+  <a href="/docs/RULES-fr.md">Français</a> •
+  <a href="/docs/RULES-iteu.md">Italiano (Italian)</a> •
+  <a href="/docs/RULES-ja.md">日本語 (Japanese)</a> •
+  <a href="/docs/RULES-kokr.md">한국어 (Korean)</a> •
+  <a href="/docs/RULES-ptbr.md">Português (Brasil)</a> •
+  <a href="/docs/RULES-zhcn.md">简体中文 (Simplified Chinese)</a> •
+  <a href="/docs/RULES-zhtw.md">繁體中文 (Taiwanese Mandarin)</a>
+</p>
 
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+[![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-This is a TL;DR of the [standard](https://github.com/feross/standard) JavaScript
+This is a summary of the [standard](https://github.com/standard/standard) JavaScript
 rules.
 
 The best way to learn about `standard` is to just install it and give it a try on
@@ -27,8 +37,12 @@ your code.
   eslint: [`quotes`](http://eslint.org/docs/rules/quotes)
 
   ```js
-  console.log('hello there')
-  $("<div class='box'>")
+  console.log('hello there')    // ✓ ok
+  console.log("hello there")    // ✗ avoid
+  console.log(`hello there`)    // ✗ avoid
+
+  $("<div class='box'>")        // ✓ ok
+  console.log(`hello ${name}`)  // ✓ ok
   ```
 
 * **No unused variables.**
@@ -172,8 +186,20 @@ your code.
   })
   ```
 
-* **Always prefix browser globals** with `window.`.<br>
-  Exceptions are: `document`, `console` and `navigator`.
+* **Declare browser globals** with a `/* global */` comment.<br>
+  Exceptions are: `window`, `document`, and `navigator`.<br>
+  Prevents accidental use of poorly-named browser globals like `open`, `length`,
+  `event`, and `name`.
+
+  ```js
+  /* global alert, prompt */
+
+  alert('hi')
+  prompt('ok?')
+  ```
+
+  Explicitly referencing the function or property on `window` is okay too, though
+  such code will not run in a Worker which uses `self` instead of `window`.
 
   eslint: [`no-undef`](http://eslint.org/docs/rules/no-undef)
 
@@ -312,7 +338,7 @@ your code.
 
 * **Files must end with a newline.**
 
-  elint: [`eol-last`](http://eslint.org/docs/rules/eol-last)
+  eslint: [`eol-last`](http://eslint.org/docs/rules/eol-last)
 
 * **No space between function identifiers and their invocations.**
 
@@ -363,16 +389,16 @@ your code.
   ```js
   var person = {
     set name (value) {    // ✗ avoid
-      this.name = value
+      this._name = value
     }
   }
 
   var person = {
     set name (value) {
-      this.name = value
+      this._name = value
     },
     get name () {         // ✓ ok
-      return this.name
+      return this._name
     }
   }
   ```
@@ -418,7 +444,7 @@ your code.
   function foo (n) {
     if (n <= 0) return
 
-    foo(n - 1)
+    foo(n - 1)                // ✓ ok
   }
   ```
 
@@ -744,7 +770,11 @@ your code.
   ```js
   var score = 100
   function game () {
-    score: 50         // ✗ avoid
+    score: while (true) {      // ✗ avoid
+      score -= 10
+      if (score > 0) continue score
+      break
+    }
   }
   ```
 
@@ -859,8 +889,9 @@ your code.
   eslint: [`no-octal`](http://eslint.org/docs/rules/no-octal)
 
   ```js
-  const num = 042     // ✗ avoid
-  const num = '042'   // ✓ ok
+  const octal = 042         // ✗ avoid
+  const decimal = 34        // ✓ ok
+  const octalString = '042' // ✓ ok
   ```
 
 * **No octal escape sequences in string literals.**
@@ -936,7 +967,7 @@ your code.
 
 * **Avoid comparing a variable to itself.**
 
-  esint: [`no-self-compare`](http://eslint.org/docs/rules/no-self-compare)
+  eslint: [`no-self-compare`](http://eslint.org/docs/rules/no-self-compare)
 
   ```js
   if (score === score) {}   // ✗ avoid
@@ -1065,6 +1096,7 @@ your code.
 
   ```js
   if (!key in obj) {}       // ✗ avoid
+  if (!(key in obj)) {}     // ✓ ok
   ```
 
 * **Avoid unnecessary use of `.call()` and `.apply()`.**
@@ -1288,7 +1320,11 @@ your code.
   window.alert('hi');  // ✗ avoid
   ```
 
-* Never start a line with `(`, `[`, or `` ` ``. This is the only gotcha with omitting semicolons, and standard protects you from this potential issue.
+* Never start a line with `(`, `[`, `` ` ``, or a handful of other unlikely possibilities.
+
+  This is the only gotcha with omitting semicolons, and `standard` protects you from this potential issue.
+
+  (The full list is: `[`, `(`, `` ` ``, `+`, `*`, `/`, `-`, `,`, `.`, but most of these will never appear at the start of a line in real code.)
 
   eslint: [`no-unexpected-multiline`](http://eslint.org/docs/rules/no-unexpected-multiline)
 
